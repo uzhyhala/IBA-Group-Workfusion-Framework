@@ -1,0 +1,6 @@
+Git v2.0.0 Release Notes
+========================
+Fixes since prev version
+------------------
+
+* Refer to WF machine dependency v.9.0.0.7 (Lumen)

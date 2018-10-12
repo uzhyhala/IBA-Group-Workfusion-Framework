@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://web-harvest.sourceforge.net/schema/1.0/config" charset="UTF-8" scriptlang="groovy">
+
+	<script><![CDATA[
+		import com.ibagroup.workfusion.rpa.core.robots.factory.MachineTaskRobotFactory;
+		import com.ibagroup.workfusion.rpa.robots.frameworktraining.SkypeSendSummaryRobot;
+
+		SkypeSendSummaryRobot runner = new MachineTaskRobotFactory(binding, "FrameworkTrainingConfig").build().newInstance(SkypeSendSummaryRobot.class);
+
+		sys.defineVariable("runner", runner, true);
+	]]></script>
+
+	<robotics-flow>
+		<robot name="web" driver="universal" close-on-completion="true" start-in-private="true">
+			<capability name="SEARCH_ALL_WINDOWS" value="true" />
+			<script><![CDATA[
+		        sys.defineVariable("success_result", runner.getWrappedObject().perform());
+			]]></script>
+		</robot>
+	</robotics-flow>
+
+	<export include-original-data="true">
+		<single-column name="success" value="${success_result.toString()}" />
+		<case>
+			<if condition="${com.ibagroup.workfusion.rpa.core.CommonConstants.SUCCESS_CLMN_FAILED.equals(success_result.toString())}">
+				<single-column name="last_error" value="Technical error on SkypeSendSummary step." />
+				<single-column name="last_error_message" value="${runner.getWrappedObject().getExceptionHandler().getLastErrorMessage()}" />
+			</if>
+		</case>
+	</export>
+
+</config>

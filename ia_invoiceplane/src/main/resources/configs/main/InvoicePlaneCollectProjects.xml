@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://web-harvest.sourceforge.net/schema/1.0/config" charset="UTF-8" scriptlang="groovy">
+
+	<script><![CDATA[
+		import com.ibagroup.workfusion.rpa.core.robots.factory.MachineTaskRobotFactory;
+		import com.ibagroup.workfusion.rpa.robots.frameworktraining.InvoicePlaneCollectProjectsRobot;
+
+		InvoicePlaneCollectProjectsRobot runner = new MachineTaskRobotFactory(binding, "FrameworkTrainingConfig").build().newInstance(InvoicePlaneCollectProjectsRobot.class);
+
+		sys.defineVariable("runner", runner, true);
+	]]></script>
+
+	<robotics-flow>
+		<robot name="seleniumDriver" driver="chrome" close-on-completion="true" start-in-private="true">
+			<script><![CDATA[
+		        sys.defineVariable("success_result", runner.getWrappedObject().perform());
+
+				products = runner.getWrappedObject().getProducts();
+				sys.defineVariable("products", products, true);
+				sys.defineVariable("total_records_count", products != null ? products.size() : 0, true);
+			]]></script>
+		</robot>
+	</robotics-flow>
+
+	<export include-original-data="true">
+		<single-column name="success" value="${success_result.toString()}" />
+		<case>
+			<if condition="${com.ibagroup.workfusion.rpa.core.CommonConstants.SUCCESS_CLMN_FAILED.equals(success_result.toString())}">
+				<single-column name="last_error" value="Technical error on InvoicePlaneCollectProjects step." />
+				<single-column name="last_error_message" value="${runner.getWrappedObject().getExceptionHandler().getLastErrorMessage()}" />
+			</if>
+			<else>
+				<multi-column list="${products}" split-results="true">
+					<put-to-column-method name="${com.ibagroup.workfusion.rpa.robots.frameworktraining.TrainingConstants.PRODUCT_INDEX}" method="getIndex"/>
+					<put-to-column-method name="${com.ibagroup.workfusion.rpa.robots.frameworktraining.TrainingConstants.PRODUCT_JSON}" method="toJson"/>
+		        </multi-column>
+
+				<single-column name="${com.ibagroup.workfusion.rpa.robots.frameworktraining.TrainingConstants.INVOICEPLANE_RPA_DURATION}"
+					value="${runner.getWrappedObject().getRpaDuration()}" />
+				<single-column name="${com.ibagroup.workfusion.rpa.robots.frameworktraining.TrainingConstants.TOTAL_PRODUCTS_COUNT}"
+					value="${total_records_count}" />
+			</else>
+		</case>
+	</export>  
+
+</config>

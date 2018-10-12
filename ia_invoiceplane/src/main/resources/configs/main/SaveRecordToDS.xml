@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://web-harvest.sourceforge.net/schema/1.0/config" scriptlang="groovy">
+
+	<script><![CDATA[
+		import com.ibagroup.workfusion.rpa.core.robots.factory.MachineTaskRobotFactory;
+		import com.ibagroup.workfusion.rpa.robots.frameworktraining.SaveRecordToDS;
+
+		SaveRecordToDS runner = new MachineTaskRobotFactory(binding, "FrameworkTrainingConfig").build().newInstance(SaveRecordToDS.class);
+		runner.perform();
+	]]></script>
+
+	<export include-original-data="true">
+	</export>
+
+</config>
