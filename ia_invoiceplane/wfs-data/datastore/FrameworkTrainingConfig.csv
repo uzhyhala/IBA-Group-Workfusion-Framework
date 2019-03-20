@@ -1,11 +1,13 @@
-"system_id","key","value"
-"1","invoicePlane_site_url","https://invoiceplane.workfusion.com"
-"2","google_search_site_url","https://www.google.com"
-"3","skype.start_url","C:\Program Files (x86)\Skype\Phone\Skype.exe /secondary"
-"4","skype.start_timeout","30"
-"5","skype.loading_wait_time_after_login","5000"
-"6","notepad.start_timeout","10"
-"7","screenshots_bucket","screenshots"
-"8","screenshots_folder",
-"9","skype.recipient_address",""
-"10","products_count","20"
+system_id,key,value
+1,invoicePlane_site_url,https://invoiceplane.workfusion.com
+2,google_search_site_url,https://www.google.com
+3,skype.start_url,C:\Program Files (x86)\Skype\Phone\Skype.exe /secondary
+4,skype.start_timeout,30
+5,skype.loading_wait_time_after_login,5000
+6,notepad.start_timeout,10
+7,screenshots_bucket,screenshots
+8,screenshots_folder,
+9,skype.recipient_address,
+10,products_count,20
+11,bp_actions,invoice_plane_actions_log
+12,bp_details,invoice_plane_details_log
